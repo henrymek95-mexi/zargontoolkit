@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeroQuest - Zargon Master Toolkit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-top">
+            <h1 class="main-title">Zargon Master Toolkit</h1>
+            <button class="btn-fullscreen" onclick="toggleFullscreen()" title="Schermo Intero">📺 Fullscreen</button>
+        </div>
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="openTab('tab-mappa', this)">🗺️ Mappa Matrix</button>
+            <button class="tab-btn" onclick="openTab('tab-armeria', this)">⚔️ Armeria Narrativa</button>
+        </div>
+    </header>
+
+    <section id="tab-mappa" class="tab-content active">
+        <div class="controls">
+            <div class="control-group">
+                <h3>Raggio d'Azione</h3>
+                <div class="radio-toolbar">
+                    <input type="radio" id="scope-room" name="scope" value="room" checked>
+                    <label for="scope-room">Stanza</label>
+                    <input type="radio" id="scope-cell" name="scope" value="cell">
+                    <label for="scope-cell">Casella</label>
+                </div>
+            </div>
+            <div class="control-group">
+                <h3>Chi Cerca? (Eroe)</h3>
+                <div class="radio-toolbar">
+                    <input type="radio" id="hero-b" name="hero" value="b" checked>
+                    <label for="hero-b">Barbaro</label>
+                    <input type="radio" id="hero-n" name="hero" value="n">
+                    <label for="hero-n">Nano</label>
+                    <input type="radio" id="hero-e" name="hero" value="e">
+                    <label for="hero-e">Elfo</label>
+                    <input type="radio" id="hero-m" name="hero" value="m">
+                    <label for="hero-m">Mago</label>
+                    <input type="radio" id="hero-all" name="hero" value="all">
+                    <label for="hero-all">Tutti</label>
+                </div>
+            </div>
+            <div class="control-group">
+                <h3>Cosa Cerca?</h3>
+                <div class="radio-toolbar">
+                    <input type="radio" id="tool-treasure" name="tool" value="treasure" checked>
+                    <label for="tool-treasure">Tesori</label>
+                    <input type="radio" id="tool-trap" name="tool" value="trap">
+                    <label for="tool-trap">Trappole</label>
+                    <input type="radio" id="tool-secret" name="tool" value="secret">
+                    <label for="tool-secret">Porte Segrete</label>
+                </div>
+            </div>
+            <div class="control-group">
+                <h3>Modalità</h3>
+                <div class="radio-toolbar">
+                    <input type="radio" id="mode-add" name="mode" value="add" checked>
+                    <label for="mode-add">Segna</label>
+                    <input type="radio" id="mode-remove" name="mode" value="remove">
+                    <label for="mode-remove">Gomma</label>
+                </div>
+            </div>
+            <div class="control-group">
+                <button class="btn-reset" onclick="resetBoard()">Reset Mappa</button>
+            </div>
+        </div>
+        <div class="board-container">
+            <div id="board"></div>
+        </div>
+    </section>
+
+    <section id="tab-armeria" class="tab-content">
+        <div class="armeria-wrapper">
+            <h2>L'Armeria Narrativa di Zargon</h2>
+            <div class="pannello-controlli">
+                <div class="select-group">
+                    <select id="eroe">
+                        <option value="barbaro">🪓 Barbaro</option>
+                        <option value="nano">🛡️ Nano</option>
+                        <option value="elfo">🗡️ Elfo</option>
+                        <option value="mago">🔮 Mago</option>
+                    </select>
+
+                    <select id="tipo-attacco">
+                        <option value="mischia">⚔️ Mischia</option>
+                        <option value="distanza">🏹 Distanza</option>
+                        <option value="magia">🔮 Magia</option>
+                    </select>
+
+                    <span class="vs-label">CONTRO</span>
+
+                    <select id="mostro">
+                        <option value="goblin">👺 Goblin</option>
+                        <option value="orco">🟢 Orco</option>
+                        <option value="scheletro">💀 Scheletro</option>
+                        <option value="zombie">🧟 Zombie</option>
+                        <option value="mummia">🧻 Mummia</option>
+                        <option value="fimir">🦎 Fimir</option>
+                        <option value="guerriero">⚔️ Guerriero del Terrore</option>
+                        <option value="drago">🐉 Drago</option>
+                        <option value="gargoyle">🗿 Gargoyle</option>
+                    </select>
+                </div>
+                
+                <div class="pulsantiera">
+                    <button class="btn-eroe-colpisce" onclick="generaAttacco('eroe_colpisce')">✅ L'Eroe Colpisce</button>
+                    <button class="btn-eroe-manca" onclick="generaAttacco('eroe_manca')">🛡️ Il Mostro Difende</button>
+                    <button class="btn-mostro-colpisce" onclick="generaAttacco('mostro_colpisce')">🩸 Il Mostro Colpisce</button>
+                    <button class="btn-mostro-manca" onclick="generaAttacco('mostro_manca')">💨 L'Eroe Schiva/Para</button>
+                </div>
+            </div>
+            
+            <div id="risultato">Il fato attende il tiro dei dadi...</div>
+
+            <!-- NUOVO: Box Cronologia Scontri -->
+            <div class="cronologia-container">
+                <h3>📜 Eco degli Scontri Precedenti</h3>
+                <ul id="cronologia-list">
+                    <li class="empty-log">Nessun evento registrato in questa sessione.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

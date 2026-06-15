@@ -1,0 +1,492 @@
+:root {
+    /* Tavolozza Colori Dark Fantasy */
+    --bg-color: #121212;
+    --bg-gradient: radial-gradient(circle, #221a15 0%, #0d0a08 100%);
+    --panel-bg: #1a1512;
+    --panel-border: #3a2f28;
+    --text-color: #ded5cd;
+    --text-dim: #a69a90;
+    --gold: #b38f4d;
+    --gold-light: #e6cb85;
+    --gold-glow: rgba(179, 143, 77, 0.4);
+    --red-accent: #801414;
+    --red-light: #b32424;
+    
+    /* Colori Mappa Matrix */
+    --wall-color: #050403;
+    --cell-bg: #241e1a;
+    --cell-border: #382e26;
+    
+    /* Indicatori di ricerca (Glow) */
+    --color-treasure: #daa520; 
+    --color-trap: #ff4500;    
+    --color-secret: #00bfff;   
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image: var(--bg-gradient);
+    color: var(--text-color);
+    font-family: 'Georgia', Palatino, 'Times New Roman', serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+    min-height: 100vh;
+    webkit-font-smoothing: antialiased;
+}
+
+/* --- HEADER & NAVIGAZIONE STRUTTURATA --- */
+header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding: 20px 20px 0;
+    width: 100%;
+    background-color: #0a0807;
+    background-image: linear-gradient(to bottom, #0f0c0a, #050403);
+    border-bottom: 3px double var(--gold);
+    box-sizing: border-box;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+}
+
+.header-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto 15px;
+}
+
+.main-title {
+    color: var(--red-accent);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), 0 0 10px rgba(128, 20, 24, 0.3);
+    margin: 0;
+    font-size: 2.2em;
+    font-weight: bold;
+}
+
+.btn-fullscreen {
+    position: absolute;
+    right: 10px;
+    background: #241c16;
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85em;
+    transition: all 0.2s ease;
+}
+
+.btn-fullscreen:hover {
+    background: var(--gold);
+    color: #111;
+    box-shadow: 0 0 8px var(--gold-glow);
+}
+
+.tab-container {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: -3px; 
+}
+
+.tab-btn {
+    background-color: #241c16;
+    color: var(--text-dim);
+    border: 2px solid var(--panel-border);
+    border-bottom: none;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+    color: var(--text-color);
+    background-color: #2e241d;
+}
+
+.tab-btn.active {
+    background-color: #1a1512;
+    color: var(--gold-light);
+    border-color: var(--gold);
+    border-bottom: 3px solid #1a1512;
+    z-index: 10;
+    text-shadow: 0 0 5px rgba(230, 203, 133, 0.4);
+}
+
+.tab-content {
+    display: none;
+    width: 100%;
+    max-width: 1150px;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px 30px;
+    box-sizing: border-box;
+}
+
+.tab-content.active {
+    display: flex;
+}
+
+/* --- PANNELLO CONTROLLI MAPPA --- */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    background-color: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.6), 0 8px 20px rgba(0,0,0,0.7);
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin-bottom: 25px;
+    width: 100%;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.control-group h3 {
+    margin: 0;
+    font-size: 0.85em;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.radio-toolbar {
+    display: flex;
+    gap: 5px;
+}
+
+.radio-toolbar input[type="radio"] { display: none; }
+.radio-toolbar label {
+    display: inline-block;
+    background-color: #292019;
+    color: var(--text-dim);
+    padding: 8px 14px;
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.15s ease;
+}
+
+.radio-toolbar label:hover {
+    color: var(--text-color);
+    border-color: var(--text-dim);
+}
+
+#scope-room:checked + label, #scope-cell:checked + label { background-color: #423227; border-color: var(--gold); color: #fff; }
+#hero-b:checked + label { background-color: #1a365d; border-color: #3182ce; color: #fff; font-weight: bold; }
+#hero-n:checked + label { background-color: #22543d; border-color: #38a169; color: #fff; font-weight: bold; }
+#hero-e:checked + label { background-color: #744210; border-color: #dd6b20; color: #fff; font-weight: bold; }
+#hero-m:checked + label { background-color: #44337a; border-color: #805ad5; color: #fff; font-weight: bold; }
+#hero-all:checked + label { background-color: #4a5568; border-color: #718096; color: #fff; font-weight: bold; }
+#tool-treasure:checked + label { background-color: rgba(218, 165, 32, 0.25); border-color: var(--color-treasure); color: #fff; font-weight: bold; }
+#tool-trap:checked + label { background-color: rgba(255, 69, 0, 0.25); border-color: var(--color-trap); color: #fff; font-weight: bold; }
+#tool-secret:checked + label { background-color: rgba(0, 191, 255, 0.2); border-color: var(--color-secret); color: #fff; font-weight: bold; }
+#mode-add:checked + label { background-color: #1c3d26; border-color: #2f855a; color: #fff; }
+#mode-remove:checked + label { background-color: #5c1d1d; border-color: #c53030; color: #fff; }
+
+.radio-toolbar input[type="radio"]:checked + label {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+}
+
+button.btn-reset {
+    background-color: #2b1f1a;
+    color: var(--text-color);
+    border: 1px solid var(--panel-border);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: inherit;
+    text-transform: uppercase;
+    align-self: flex-end;
+    transition: all 0.2s ease;
+}
+
+button.btn-reset:hover { 
+    background-color: var(--red-accent); 
+    border-color: var(--gold-light);
+    color: #fff;
+}
+
+/* --- GRIGLIA DELLA MAPPA --- */
+.board-container {
+    padding: 10px;
+    background-color: #0d0a08;
+    border: 4px double var(--gold);
+    border-radius: 4px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(26, 40px); 
+    grid-template-rows: repeat(19, 40px);    
+    background-color: var(--wall-color);
+    border: 5px solid var(--wall-color); 
+    box-sizing: content-box;
+}
+
+.cell {
+    background-color: var(--cell-bg);
+    border-right: 1px solid var(--cell-border);
+    border-bottom: 1px solid var(--cell-border);
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1px 3px;
+    height: 40px; 
+    width: 40px;  
+    position: relative;
+}
+
+.cell.hover-highlight { 
+    filter: brightness(1.4) contrast(1.1); 
+    outline: 1px dashed var(--gold-light); 
+    z-index: 5; 
+}
+.wall-right { border-right: 5px solid var(--wall-color) !important; }
+.wall-bottom { border-bottom: 5px solid var(--wall-color) !important; }
+.corner-br::after {
+    content: ''; position: absolute; bottom: -1px; right: -1px;
+    width: 5px; height: 5px; background-color: var(--wall-color); z-index: 10;
+}
+
+.hero-row { 
+    display: flex; 
+    align-items: center; 
+    height: 8px; 
+    width: 100%; 
+}
+
+.hero-label { 
+    font-size: 8px; 
+    font-family: 'Courier New', monospace; 
+    font-weight: bold; 
+    color: #594f46; 
+    width: 8px; 
+    line-height: 8px; 
+}
+
+.search-indicators { 
+    display: flex; 
+    gap: 1.5px; 
+    flex-grow: 1; 
+    justify-content: flex-end; 
+}
+
+.indicator { 
+    font-size: 8.5px; 
+    line-height: 1;
+    opacity: 0.08; 
+    transition: opacity 0.15s, transform 0.15s;
+    display: inline-block;
+}
+
+.indicator.active { 
+    opacity: 1 !important; 
+    transform: scale(1.15); 
+}
+
+.indicator.ind-treasure.active { text-shadow: 0 0 3px var(--color-treasure); }
+.indicator.ind-trap.active { text-shadow: 0 0 3px var(--color-trap); }
+.indicator.ind-secret.active { text-shadow: 0 0 3px var(--color-secret); }
+
+/* --- INTERFACCIA ARMERIA NARRATIVA --- */
+.armeria-wrapper {
+    background-color: var(--panel-bg);
+    border: 2px solid var(--panel-border);
+    outline: 1px solid rgba(179, 143, 77, 0.2);
+    outline-offset: -6px;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+    box-sizing: border-box;
+}
+
+.armeria-wrapper h2 {
+    color: #c43323;
+    font-size: 1.8em;
+    text-shadow: 2px 2px 4px #000;
+    letter-spacing: 2px;
+    margin-top: 0;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+
+.pannello-controlli {
+    background-color: #120e0c;
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid var(--panel-border);
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+    margin-bottom: 20px;
+}
+
+.select-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.pannello-controlli select { 
+    padding: 10px 15px; 
+    font-size: 16px; 
+    border-radius: 4px; 
+    border: 1px solid var(--gold);
+    background-color: #241c16;
+    color: #fff;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.pannello-controlli select:hover {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 5px var(--gold-glow);
+}
+
+.vs-label {
+    font-size: 18px; 
+    font-weight: bold; 
+    color: #615249;
+    letter-spacing: 1px;
+}
+
+.pulsantiera {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.pulsantiera button { 
+    padding: 14px 18px;
+    font-size: 15px;
+    border-radius: 4px; 
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    color: #fff; 
+    cursor: pointer; 
+    font-weight: bold;
+    font-family: inherit;
+    text-transform: uppercase;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+}
+
+.btn-eroe-colpisce { background: linear-gradient(to bottom, #1e5c2e, #133b1a); border-bottom: 3px solid #0b2410 !important; }
+.btn-eroe-manca { background: linear-gradient(to bottom, #1d4ed8, #1e3a8a); border-bottom: 3px solid #172554 !important; }
+.btn-mostro-colpisce { background: linear-gradient(to bottom, #991b1b, #7f1d1d); border-bottom: 3px solid #450a0a !important; }
+.btn-mostro-manca { background: linear-gradient(to bottom, #6b21a8, #581c87); border-bottom: 3px solid #3b0764 !important; }
+
+@media (hover: hover) {
+    .btn-eroe-colpisce:hover { background: #226e34; transform: translateY(-1px); }
+    .btn-eroe-manca:hover { background: #2563eb; transform: translateY(-1px); }
+    .btn-mostro-colpisce:hover { background: #dc2626; transform: translateY(-1px); }
+    .btn-mostro-manca:hover { background: #7e22ce; transform: translateY(-1px); }
+}
+
+.pulsantiera button:active {
+    transform: translateY(2px);
+    box-shadow: none;
+}
+
+/* --- BOX FRASE GENERATA --- */
+#risultato { 
+    font-size: 21px; 
+    font-style: italic; 
+    padding: 25px; 
+    border: 1px solid var(--panel-border); 
+    border-radius: 6px; 
+    background-color: #211915;
+    background-image: radial-gradient(circle at center, #2b1f19 0%, #17110e 100%);
+    min-height: 70px;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.9), 0 5px 15px rgba(0,0,0,0.5);
+    line-height: 1.6;
+    color: #e3dcd5;
+    transition: opacity 0.3s ease;
+    margin-bottom: 25px;
+}
+
+/* --- BOX CRONOLOGIA / ECO DEGLI SCONTRI --- */
+.cronologia-container {
+    text-align: left;
+    background-color: #120e0c;
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    padding: 15px 20px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+}
+
+.cronologia-container h3 {
+    margin: 0 0 12px;
+    font-size: 1em;
+    color: var(--gold-light);
+    border-bottom: 1px double var(--panel-border);
+    padding-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#cronologia-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 150px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#cronologia-list li {
+    font-size: 0.95em;
+    line-height: 1.4;
+    padding: 6px 10px;
+    background-color: #1a1411;
+    border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
+    color: var(--text-dim);
+}
+
+#cronologia-list li strong {
+    color: var(--text-color);
+    font-weight: normal;
+}
+
+#cronologia-list .empty-log {
+    border-left: 3px solid #332822;
+    color: #594f46;
+    font-style: italic;
+    background: transparent;
+}
